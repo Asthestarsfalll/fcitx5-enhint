@@ -1,0 +1,13 @@
+[Addon]
+Name=English hints above candidates
+Name[zh_CN]=候选词上方显示英文
+Name[zh_TW]=候選詞上方顯示英文
+Category=Module
+Version=@PROJECT_VERSION@
+Library=libenhint
+Type=SharedLibrary
+OnDemand=False
+Configurable=True
+
+[Addon/Dependencies]
+0=core:5.1.20
