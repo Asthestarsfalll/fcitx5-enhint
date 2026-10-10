@@ -83,6 +83,8 @@ private:
     void loadDictionary();
     bool isCandidateText(fcitx::InputContext *ic,
                          const fcitx::Text &text) const;
+    bool isPreeditText(fcitx::InputContext *ic,
+                       const fcitx::Text &text) const;
     bool anySiblingHasHint(fcitx::InputContext *ic,
                            const Cedict &dictionary) const;
     void toggle(fcitx::InputContext *ic);

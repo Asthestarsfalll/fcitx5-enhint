@@ -59,6 +59,16 @@ Enhint::Enhint(fcitx::Instance *instance) : instance_(instance) {
                            "SkipPrograms if it inserts the hint";
                 }
             }
+            // The input panel preedit is displayed inline by the client and is
+            // committed verbatim (e.g. browsers that commit the preedit on
+            // composition end), so decorating it would leak the hint into the
+            // text field. This is easy to trigger accidentally because the
+            // preedit often coincides with a candidate: a raw/spell candidate
+            // (typing "wo" offers a "wo" candidate) or the committed sentence
+            // in CommitPreview mode. Only decorate real candidates.
+            if (isPreeditText(inputContext, text)) {
+                return;
+            }
             if (!isCandidateText(inputContext, text)) {
                 return;
             }
@@ -159,6 +169,15 @@ bool Enhint::isCandidateText(fcitx::InputContext *inputContext,
         }
     }
     return false;
+}
+
+bool Enhint::isPreeditText(fcitx::InputContext *inputContext,
+                           const fcitx::Text &text) const {
+    const auto &panel = inputContext->inputPanel();
+    const auto string = text.toString();
+    return (!panel.preedit().empty() && panel.preedit().toString() == string) ||
+           (!panel.clientPreedit().empty() &&
+            panel.clientPreedit().toString() == string);
 }
 
 bool Enhint::anySiblingHasHint(fcitx::InputContext *inputContext,
